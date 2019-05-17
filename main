@@ -1,0 +1,122 @@
+// imported libraries
+
+import java.util.Scanner;   // to use Scanner, nextLine, & other keyboard inputs
+import java.io.File;        // File
+import java.io.IOException; // IOException
+import java.io.FileWriter;  // write
+
+class Main 
+{
+  // constants
+
+  static final String NAME = "Sven";    // name of program     
+  static final String INVENTORY_LIST_FILENAME = "ItemsForSale.txt";
+  static boolean selecting = true;
+  public static void main(String[] args)
+  {
+    // local variables
+    InventoryList itemsForSale = new InventoryList();  // list of items
+    
+    Scanner keyboard = new Scanner(System.in);        // to obtain human's input  
+  
+    String userMenuChoice = "";   // human inputted menu choice
+    String newItem = "";          // new item added to inventory
+    int customerSelection = 0;    // customer selection from menu list of items
+
+    
+    // TODO - must read the list of items from the external file and
+    // store them in itemsForSale
+
+
+    // setting up the screen (interface / view)
+    System.out.println("\n\n\nHello, I am the world's first smart vending machine. My name is " + NAME + "!\n\n\n");
+
+    System.out.println();
+    
+    displayMenu();
+
+    userMenuChoice = keyboard.nextLine();
+
+    // trim leading & trailing spaces
+    userMenuChoice = userMenuChoice.trim(); 
+
+    // TODOSF - allow user to input lowercase letters
+
+    // TODOKP - add outer while loop with sentinel value to quit
+
+
+    if (userMenuChoice.equals("1") || userMenuChoice.equals("A"))
+    {
+      System.out.println("IN ADMIN MODE.....");
+      System.out.print("What is your new item? ");
+      newItem = keyboard.nextLine();
+      itemsForSale.addItem(newItem);
+      while(selecting == true)
+      {
+        System.out.println("Anything else? Type \"Done\" If not.");
+        newItem = keyboard.nextLine();
+        if(newItem.equals("Done") || newItem.equals("done"))
+        {
+          selecting = false;
+          break;
+        }
+        else
+        {
+          itemsForSale.addItem(newItem);
+        }
+      }
+      System.out.println("Your updated inventory list is: ");
+      itemsForSale.displayList();
+
+      try
+      { 
+        FileWriter externalFile = new FileWriter(INVENTORY_LIST_FILENAME, true);  // true specifies append mode
+        
+        // add the new item to the end of the file with
+        // the inventory list
+        externalFile.write(newItem + "\n");
+        externalFile.flush();                      
+        externalFile.close();                                    
+      }                                                           
+      catch (IOException ioe) // if error occurs trying to write data to file
+      {
+        System.err.println(ioe);
+      }
+
+    }
+    else if (userMenuChoice.equals("2") || userMenuChoice.equals("C"))
+    {
+      System.out.println("IN CUSTOMER MODE.....");
+      
+      itemsForSale.displayList();
+
+      // display the list of items as a numbered list
+      for (int i = 0; i < itemsForSale.numberOfItems(); i++)
+      {
+        System.out.println((i + 1) + ". " + itemsForSale.selectItem(i));
+      }
+
+      System.out.println("What would you like to purchase? ");
+      customerSelection = keyboard.nextInt();
+
+      System.out.println("DEBUGGING: the customer input is " + customerSelection);
+
+      // TODOPer3
+      // display available item by reading those values from an external data file
+      // allow customer to input a choice
+      // trust the user to select the correct item from the machine & 
+      // deposit exact amount of MinichPay (not ApplePay or AndroidPay) money 
+      // in our Room 311 cash till on the honesty system
+    }
+
+  } // end of main method
+
+  // display menu
+  public static void displayMenu()
+  {  
+    System.out.println("1. (A)dmin Mode");
+    System.out.println("2. (C)ustomer Mode");
+    System.out.print("Choice: ");
+  }
+
+} // end of Main class
