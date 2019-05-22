@@ -45,13 +45,13 @@ class Main
     // TODOKP - add outer while loop with sentinel value to quit
 
 
-    if (userMenuChoice.equals("1") || userMenuChoice.equals("A"))
+    if (userMenuChoice.equals("1") || userMenuChoice.equals("A") || userMenuChoice.equals("a")) // Removed case sensitivity
     {
       System.out.println("IN ADMIN MODE.....");
       System.out.print("What is your new item? ");
       newItem = keyboard.nextLine();
       itemsForSale.addItem(newItem);
-      while(selecting == true)
+      while(selecting == true)                                      // Multi choice system
       {
         System.out.println("Anything else? Type \"Done\" If not.");
         newItem = keyboard.nextLine();
@@ -84,8 +84,7 @@ class Main
       }
 
     }
-    else if (userMenuChoice.equals("2") || userMenuChoice.equals("C"))
-    {
+    else if (userMenuChoice.equals("2") || userMenuChoice.equals("C") || userMenuChoice.equals("c")) // Removed case sensitivity    {
       System.out.println("IN CUSTOMER MODE.....");
       
       itemsForSale.displayList();
