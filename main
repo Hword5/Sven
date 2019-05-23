@@ -76,7 +76,7 @@ class Main
 
       ////////////////////// Admin Mode
       // TODO - create separate programs for customers and admins
-      if (userMenuChoice.equals("1") || userMenuChoice.equals("A"))
+      if (userMenuChoice.equals("1") || userMenuChoice.equals("A") || userMenuChoice.equals("a"))
       {
         System.out.println("IN ADMIN MODE.....");
         
@@ -130,7 +130,7 @@ class Main
       }
       ////////////////////// Customer Mode
       // TODO - create separate programs for customers and admins
-      else if (userMenuChoice.equals("2") || userMenuChoice.equals("C"))
+      else if (userMenuChoice.equals("2") || userMenuChoice.equals("C") || userMenuChoice.equals("A"))
       {
         System.out.println("IN CUSTOMER MODE.....");
 
