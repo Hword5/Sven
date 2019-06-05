@@ -127,6 +127,10 @@ class Main
                   selecting = false;
                   break;
                 }
+                if (!itemsForSale.addItem(newItem))
+                {
+                  System.out.println("The update failed. Perhaps the item was already in the list.");    
+                }          
                 else
                 {
                   itemsForSale.addItem(newItem);
