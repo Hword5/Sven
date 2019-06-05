@@ -11,10 +11,10 @@ class Main
 
   static final String NAME = "Sven";    // name of program  
   static final int EXIT_CHOICE = 3;     // menu choice to exit program
-
+  
   // external data file containing list of items sold in vending machine   
   static final String INVENTORY_LIST_FILENAME = "ItemsForSale.txt";
-
+  static boolean selecting = true;
   public static void main(String[] args)
   {
     // local variables
@@ -27,7 +27,8 @@ class Main
   
     String userMenuChoice = "";   // human inputted menu choice
     String newItem = "";          // new item added to inventory
-    
+    String PIN = "0000";
+
     // customer selection from menu list of items
     int customerSelection = 0;    
 
@@ -52,34 +53,52 @@ class Main
       System.err.println(inputOutputError); // directing system error to error log file
     }
 
+
     ////////////////////// setting up the screen
+    clearScreen();
 
     System.out.println("\n\n");       // blank lines to space output
 
     System.out.println("Hello, I am the world's first smart vending machine. My name is " + NAME + "!");
-
     
-    System.out.println("\n\n");       // blank lines to space output
+    displayMachine();
+    
+    // derived from http://www.angelfire.com/co/cajhnesplace/ascii/vend.html
+    
+    System.out.println("\n");       // blank lines to space output
     
     ////////////////////// interact with customer
 
     // loop until human inputs the choice to exit the menu
-    // TODO - find a better way to convert an int (EXIT_CHOICE) to a String
     while (!userMenuChoice.equals(EXIT_CHOICE + ""))
     {
       displayMenu();
 
       System.out.print("Choice: ");
+
       // trim leading & trailing spaces
-      // TODO - allow user to input lowercase letters
       userMenuChoice = keyboard.nextLine().trim();  
 
       ////////////////////// Admin Mode
-      // TODO - create separate programs for customers and admins
-      if (userMenuChoice.equals("1") || userMenuChoice.equals("A") || userMenuChoice.equals("a"))
+
+      if (userMenuChoice.equals("1") || userMenuChoice.equals("A")  || userMenuChoice.equals("a"))
       {
         System.out.println("IN ADMIN MODE.....");
         
+
+        System.out.println("Please enter PIN: ");
+        PIN = keyboard.nextLine();
+
+        if (PIN.equals("0000"))
+        {
+          System.out.println("Still in     [-]ADMIN MODE[-]");
+        }
+        else if (!(PIN.equals("0000")))
+        {
+          System.out.println("INCORRECT PASSWORD.");
+          System.exit(0);
+        }
+
         System.out.print("What is the new item to add to the machine's inventory? ");
         newItem = keyboard.nextLine();    // obtain user's input via keyboard
         
@@ -101,17 +120,18 @@ class Main
             System.out.println(newItem);
             while(selecting == true)
               {
-               System.out.println("Anything else? Type \"Done\" If not.");
-               newItem = keyboard.nextLine();
-               if(newItem.equals("Done") || newItem.equals("done"))
-                 {
+                System.out.println("Anything else? Type \"Done\" If not.");
+                newItem = keyboard.nextLine();
+                if(newItem.equals("Done") || newItem.equals("done"))
+                {
                   selecting = false;
                   break;
                 }
                 else
                 {
-                itemsForSale.addItem(newItem);
+                  itemsForSale.addItem(newItem);
                 }
+      }
             externalFile.flush();                      
             externalFile.close(); 
 
@@ -129,8 +149,7 @@ class Main
 
       }
       ////////////////////// Customer Mode
-      // TODO - create separate programs for customers and admins
-      else if (userMenuChoice.equals("2") || userMenuChoice.equals("C") || userMenuChoice.equals("A"))
+      else if (userMenuChoice.equals("2") || userMenuChoice.equals("C") || userMenuChoice.equals("c"))
       {
         System.out.println("IN CUSTOMER MODE.....");
 
@@ -142,15 +161,20 @@ class Main
 
         System.out.println("What would you like to purchase? ");
         customerSelection = keyboard.nextInt();
-
+/*
+        for (int i = 0; i < numItems; i++)
+        {
+          InventoryList nextItem: itemsForSale)
+        {
+          if (nextItem.equals(userInput))
+          {
+            itemsForSale.removeItem(nextItem);
+            break;
+          }
+        }
+*/
         System.out.println("DEBUGGING: the customer input is #" + customerSelection);
-        itemsForSale.removeItem("avocados");
-
-        // TODO save / write the current most upated list of items (one by one) 
-        // back to the external file
-        // close the file
-
-
+        
         try
         { 
           FileWriter externalFile = new FileWriter(INVENTORY_LIST_FILENAME, false);  
@@ -179,21 +203,67 @@ class Main
         // deposit exact amount of MinichPay (not ApplePay or AndroidPay) money 
         // in our Room 311 cash till on the honesty system
       }
+      else if (userMenuChoice.equals("3") || userMenuChoice.equals("E") || userMenuChoice.equals("e"))
+      {
+       System.out.println("Exit");
+       System.out.println("Goodbye! Have a nice day! SF");
+       break;
+      }
 
     } // end of while loop
 
-    System.out.println("Goodbye");
 
   } // end of main method
 
   /////////////////////// static functions
 
-  // display menu
+  // displays menu
   public static void displayMenu()
   {  
-    System.out.println("1. (A)dmin Mode");
-    System.out.println("2. (C)ustomer Mode");
-    System.out.println(EXIT_CHOICE + ". Exit");
+    System.out.println("\033[43m1. (A)dmin Mode\033[0m");
+    System.out.println("\033[46m2. (C)ustomer Mode\033[0m");
+    System.out.println("\033[1;41m" + EXIT_CHOICE + ". (E)xit\033[0m\033[32m");
+  }
+
+  // deletes everything in console output
+  public static void clearScreen() 
+  {  
+    System.out.print("\033[H\033[2J");  
+    System.out.flush();  
+  }  
+
+  public static void displayMachine()
+  {
+      System.out.println("|____________________________________________|"); 
+      System.out.println("|####### Minich's Sven Vending Machine ######|"); 
+      System.out.println("|#|                           |##############|"); 
+      System.out.println("|#|  =====  ..--''`  |~~``|   |##|````````|##|"); 
+      System.out.println("|#|  |   |  \\     |  :    |   |##| Hello, |##|"); 
+      System.out.println("|#|  |___|   /___ |  | ___|   |##|i'm Sven|##|"); 
+      System.out.println("|#|  /=__\\  ./.__\\   |/,__\\   |##| please |##|"); 
+      System.out.println("|#|  \\__//   \\__//    \\__//   |##| choose |##|"); 
+      System.out.println("|#|===========================|##| an item ##|"); 
+      System.out.println("|#|```````````````````````````|##############|"); 
+      System.out.println("|#| =.._      +++     //////  |##############|"); 
+      System.out.println("|#| \\/  \\     | |    \\ \\   \\  |#|`````````|##|"); 
+      System.out.println("|#|  \\___\\    |_|     /___ /  |#| _______ |##|"); 
+      System.out.println("|#|  / __\\   /|_|\\   // __\\   |#| |1|2|3| |##|"); 
+      System.out.println("|#|  \\__//-  \\|_//   -\\__//   |#| |4|5|6| |##|"); 
+      System.out.println("|#|===========================|#| |7|8|9| |##|"); 
+      System.out.println("|#|```````````````````````````|#| ``````` |##|"); 
+      System.out.println("|#| ..--    ______   .--._.   |#|[=======]|##|"); 
+      System.out.println("|#| \\   \\   |    |   |    |   |#|  _   _  |##|"); 
+      System.out.println("|#|  \\___\\  : ___:   | ___|   |#| ||| ( ) |##|"); 
+      System.out.println("|#|  / __\\  |/ __\\   // __\\   |#| |||  `  |##|"); 
+      System.out.println("|#|  \\__//   \\__//  /_\\__//   |#|  ~      |##|"); 
+      System.out.println("|#|===========================|#|_________|##|");     
+      System.out.println("|#|```````````````````````````|##############|");
+      System.out.println("|############################################|"); 
+      System.out.println("|#|||||||||||||||||||||||||||||####```````###|");     
+      System.out.println("|#||||||||||||PUSH|||||||||||||####\\|||||/###|");
+      System.out.println("|############################################|");   
+      System.out.println("|____________________________________________|");
+    
   }
 
 } // end of Main class
