@@ -132,6 +132,7 @@ class Main
                   itemsForSale.addItem(newItem);
                 }
       }
+            selecting = true;
             externalFile.flush();                      
             externalFile.close(); 
 
